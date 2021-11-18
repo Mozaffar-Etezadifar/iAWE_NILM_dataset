@@ -1,0 +1,1 @@
+In this folder you will have temporary dataframes that contain not-fully-processed meters data. It's meant to seperate final files from the temporary ones and also speeding up re-runs.
