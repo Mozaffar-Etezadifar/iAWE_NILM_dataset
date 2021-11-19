@@ -40,14 +40,14 @@ To better understand the problem when using the raw data in iAWE dataset, I've p
 
 <h1 align="center">
   <br>
-  <img src="https://github.com/Mozaffar-Etezadifar/iAWE_NILM_dataset/blob/e09eb2dfefd1a41c38eb0fe6acaad6d21f215cb2/pictures/Fridge.png" alt="AC" width="800">
+  <img src="https://github.com/Mozaffar-Etezadifar/iAWE_NILM_dataset/blob/3d565ffdf3722afd5ce226a38afd980ed73eb26c/pictures/1.png" alt="AC" width="800">
 </h1>
 
 As you see, when youplot it in `Python` the `NA` timestamp will be plotted as a direct line between last available data and the next available one. It is neither human readable (to some extents!) nor NILM algorithm readable. In fact what your NILM algorithm will be fed with is the series of these values because your algorithm has nothing to do with timestamps! See this is what NILM algorithm sees as the AC power consumption:
 
 <h1 align="center">
   <br>
-  <img src="https://github.com/Mozaffar-Etezadifar/iAWE_NILM_dataset/blob/5ff754f07f79d4a8be686bbeb0d493a543615eaf/pictures/AC%20without%20timestamo.png" alt="AC WO" width="800">
+  <img src="https://github.com/Mozaffar-Etezadifar/iAWE_NILM_dataset/blob/3d565ffdf3722afd5ce226a38afd980ed73eb26c/pictures/2.png" alt="AC WO" width="800">
 </h1>
 
 Now to make it both human readable and NILM algorithm readable, I did as below: (I've commented the code so you can see what is happening in every part of the code)
@@ -62,3 +62,12 @@ Now to make it both human readable and NILM algorithm readable, I did as below: 
 - Filling `NA` values with last available value in dataframes
 - Saving all the dataframes as CSV files in the prepared data folder
 - Done!
+
+<h1 align="center">
+  <br>
+  <img src="https://github.com/Mozaffar-Etezadifar/iAWE_NILM_dataset/blob/3d565ffdf3722afd5ce226a38afd980ed73eb26c/pictures/3.png" alt="AC WO" width="800">
+</h1>
+
+#  Conclusion
+Basically, what we have here after running this code is 11 CSV files of `W`, `VAR`, `VA`, `f`, `V`, `PF` and `A` for 11 different meters. Prepared CSV file are all of the same length without `NAN` or `NA` values which are ready to be fed to any NILM algorithm. Despite the fact that I've done these changes to iAWE dataset, I'm sure the publishers of this dataset have much better solution via NILM-TK to have such an output. However due to lack of documentation or changes in their code I prefered to do this data preprocessing myself. Hope you enjoy it!
+
