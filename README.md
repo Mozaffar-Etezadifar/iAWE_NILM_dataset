@@ -18,3 +18,23 @@ iAWE is a wonderful dataset for those of us who work on Non-Intrusive Load Monit
 - Download the repo and all its folders.
 - Unzip the **electricity.tar.gz** and copy all 12 CSV file (plus the **labels** file into the electricity folder of the downloaded repo.
 - Now everythng is ready for you to start the data preprocessing using the **main.py** file.
+But before running the code let me show you what kind of problems we had with the original iAWE hdf5 file.
+
+#  What problems did we solve?
+Well, to be honest NILM-TK documentation is not very clear! If you try to use the hdf5 datafile of the datasets that works with NILM-TK, soon you will admit it. Sometimes you find the the similiar questions on stack overflow but when you try them, they simply don't work due to some updates in NILM-TK (undocumented maybe!?). So, having full control on the data was my main incentive to redo the data preprocessing by my self.
+You see 12 CSV files in your downloaded files. They belong to:
+- main meter (1)
+- main meter (2)
+- fridge
+- air conditioner (1)
+- air conditioner (2)
+- washing machine
+- laptop
+- iron
+- kitchen outlets
+- television
+- water filter
+- water motor
+The publisher of iAWE dataset has recommended to ignore the **water motor** CSV file as it is not accurate (so did we!). Each CSV file consists of `timestamp`, `W`, `VAR`, `VA`, `f`, `V`, `PF` and `A` columns. `timestamp` can be read and converted to read time and date by `Python` libraries. The publisher of dataset have collected time stamps to reduce the size of final data files which means there is no sampling when the appliances are not consuming power. On the other hand the start time of different appliances measurement is not the same so the length, start and end of most csv files are different. When you plot it in NILM-TK it is fine becuase it reads the timestamps and ignores the `NA` time steps. However when you want to feed this data into your algorithm it will be a problem which needs data preprocessing.
+
+
