@@ -36,5 +36,29 @@ You see 12 CSV files in your downloaded files. They belong to:
 - water filter
 - water motor
 The publisher of iAWE dataset has recommended to ignore the **water motor** CSV file as it is not accurate (so did we!). Each CSV file consists of `timestamp`, `W`, `VAR`, `VA`, `f`, `V`, `PF` and `A` columns. `timestamp` can be read and converted to read time and date by `Python` libraries. The publisher of dataset have collected time stamps to reduce the size of final data files which means there is no sampling when the appliances are not consuming power. On the other hand the start time of different appliances measurement is not the same so the length, start and end of most csv files are different. When you plot it in NILM-TK it is fine becuase it reads the timestamps and ignores the `NA` time steps. However when you want to feed this data into your algorithm it will be a problem which needs data preprocessing.
+To better understand the problem when using the raw data in iAWE dataset, I've plotted `W` (active power) of the air conditioner which is CSV file number 4.
 
+<h1 align="center">
+  <br>
+  <img src="https://github.com/Mozaffar-Etezadifar/iAWE_NILM_dataset/blob/e09eb2dfefd1a41c38eb0fe6acaad6d21f215cb2/pictures/Fridge.png" alt="AC" width="800">
+</h1>
 
+As you see, when youplot it in `Python` the `NA` timestamp will be plotted as a direct line between last available data and the next available one. It is neither human readable (to some extents!) nor NILM algorithm readable. In fact what your NILM algorithm will be fed with is the series of these values because your algorithm has nothing to do with timestamps! See this is what NILM algorithm sees as the AC power consumption:
+
+<h1 align="center">
+  <br>
+  <img src="https://github.com/Mozaffar-Etezadifar/iAWE_NILM_dataset/blob/5ff754f07f79d4a8be686bbeb0d493a543615eaf/pictures/AC%20without%20timestamo.png" alt="AC WO" width="800">
+</h1>
+
+Now to make it both human readable and NILM algorithm readable, I did as below: (I've commented the code so you can see what is happening in every part of the code)
+- Loaded all CSV files in a dictionary of Dataframes with CSV file orders
+- Measured the lowes and highest timestamp in order to know the length of the measurement period (they have different lengthes!)
+- Created a big dataframe of zeros with from lowest timestamp to the highest one as its index
+- Used the `update` method on dataframes to transfer the values of dataframes to the big dataframes of zeros (Now all of them have the same length)
+- Putting all dfs into a dictionary of dataframes
+- Casting all the dataframes into the efficient  period of sampling (Because now we know which part of sampling is useless)
+- Removing `NAN` values
+- Dropping unwanted columns
+- Filling `NA` values with last available value in dataframes
+- Saving all the dataframes as CSV files in the prepared data folder
+- Done!
